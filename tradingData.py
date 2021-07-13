@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-AFG
 Created 10 July 2021
 Updated 11 July 2021
 @author: Mayur
