@@ -6,6 +6,10 @@ class twitterBot:
         self.message = message
 
     def tweet(self):
+        """
+        Sends a tweet to a twitter bot.
+        """
+        
         auth = tweepy.OAuthHandler(t_api_key, t_api_secret_key) 
         auth.set_access_token(t_access_token, t_access_token_secret)
 
@@ -14,6 +18,7 @@ class twitterBot:
         bot.update_status(self.message)
 
         return 'Tweeted message'
+
 
 if __name__ == '__main__':
     text = 'test'

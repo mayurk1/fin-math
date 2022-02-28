@@ -8,7 +8,6 @@ import os
 from datetime import datetime
 
 class EMANS:
-    #data = None
     def __init__(self, ticker, passdf=None, loops=35, delta=253, getDate=False, getBuyHold=False, getReturn=False, graph=False, df=False, log=False, tweet=False):
         self.ticker = ticker
         # Number of days to add to long/short and
@@ -36,10 +35,15 @@ class EMANS:
 
 
     def findBestReturn(self):
+        """
+        Calculate the best MA window period and create output
+        objects based on provided input
+        """
+        
         plt.style.use('seaborn')
         global data
         global closes
-        # Download price data or use provided
+        # Download price data or use provided input
         if isinstance(self.passdf, pd.DataFrame):
             data = self.passdf
         else:    
@@ -85,8 +89,6 @@ class EMANS:
 
         # Plot best return graph if toggle selected
         # See notes from below
-        #print('fast ' + str(bestFast))
-        #print('slow ' + str(bestSlow))
         fastEMA = str(bestFast) + " EMA"
         slowEMA = str(bestSlow) + " EMA"
         
@@ -107,7 +109,7 @@ class EMANS:
         lastBuyDate = datetime.strptime(str(lastBuyDate)[:10], "%Y-%m-%d")
         todayDate = datetime.today()
         # Add 1 because datetime subtraction is inclusive
-        lastBuyDateDelta = ((lastBuyDate - todayDate).days + 1)*-1
+        lastBuyDateDelta = ((lastBuyDate - todayDate).days + 1) * -1
 
         # Console output/tweet if toggle enabled
         logText = '$' + self.ticker
@@ -142,7 +144,6 @@ class EMANS:
             plt.title(self.ticker + ' EMA Crossover Last ' + str(self.delta) + ' Days')
             plt.legend()
             plt.grid()
-            #plt.show()
             today = str(todayDate.strftime("%Y-%m-%d"))
             try:
                 os.mkdir('output/' + today)
@@ -163,8 +164,11 @@ class EMANS:
 
         return returnValues
         
-    
-    def findReturn(self, fast, slow):        
+        
+    def findReturn(self, fast, slow):   
+        """
+        Calculates MA crossover return based on provided window.
+        """     
         # Create column names based on input values
         fastEMA = str(fast) + " EMA"
         slowEMA = str(slow) + " EMA"
@@ -183,18 +187,14 @@ class EMANS:
         data['position'] = data['signal'].diff()
 
         # Grab prices at signals
-        data['return'] = data['position']*data['close']*-1
-        # TODO
-        # if price is less than previous latest, value, don't
-        # add it, if statement before adding to list
+        data['return'] = data['position']*data['close'] * -1
         r = data['return'].tolist()
-        #print(r)
         r = [i for i in r if i != 0]
         lastBuy = 0.0
         initial = 1.0
         gross = 0.0
         holding = False
-        # Exponential Moving Average Nought Sell 
+        # Exponential Moving Average Naught Sell 
         # 
         # Buy at first buy signal.
         # Hold until sell signal:
@@ -217,10 +217,10 @@ class EMANS:
                 gross += price
                 holding = False
                 lastBuy = 0.0
-            elif price < 0  and not holding and gross >= price*-1:
+            elif price < 0  and not holding and gross >= price * -1:
                 gross += price
                 holding = True
-                lastBuy = price*-1
+                lastBuy = price * -1
         
         # If last trade signal a buy, add current price
         # Else if sell, current price not added
@@ -243,6 +243,4 @@ if __name__ == '__main__':
 
     EMANS(stock, loops=252, delta=254, graph=True, log=True).findBestReturn()
     
-    print('Run time: ' + str(round(time.time() - startTime, 2)) + 's')
-    print()
-
+    print('Run time: ' + str(round(time.time() - startTime, 2)) + 's\n')

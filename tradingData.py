@@ -8,21 +8,24 @@ api = tradeapi.REST(api_key, api_secret, base_url, api_version='v2')
 
 class histData: 
     def daily(ticker, delta):
-        # Request historic data from alpaca API into
-        # a pandas dataframe of daily closes delta 
-        # days from current days (dataset has nontrading
-        # days already removed) 
+        """
+        Request historic data from alpaca API into
+        a pandas dataframe of daily closes delta 
+        days from current days (dataset has nontrading
+        days already removed) 
+        """
         stock = api.get_barset(ticker, 'day', limit=delta).df
         stock.columns = stock.columns.droplevel()
 
         return stock
 
-    #WIP
-    # TODO create time interval functions 
+
     def min15(ticker, delta):
-        # Request historic data from alpaca API into
-        # a pandas dataframe
+        """
+        Request historic data from alpaca API into
+        a pandas dataframe
+        """
         stock = api.get_barset(ticker, 'minute', limit=delta).df
         stock.columns = stock.columns.droplevel()
-
+        
         return stock

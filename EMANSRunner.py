@@ -3,14 +3,16 @@ import time
 
 if __name__ == '__main__':
     startTime = time.time()
-    # Takes in a list of stocks to run the EMANS algo on
-    #
-    # Do not use stocks that have split within delta
-    # time period (API limitation)
+    """
+    Takes in a list of stocks to run the EMANS algo on.
+    
+    Do not use stocks that have split within delta
+    time period (API limitation).
+    """
     faangs = [
         'SPY',
         'FB',
-        #'AAPL',
+        'AAPL',
         'AMZN',
         'NFLX',
         'GOOG'
